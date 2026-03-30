@@ -1,6 +1,5 @@
 import base64
 import json
-import os
 import sys
 import threading
 from typing import Union
@@ -117,7 +116,6 @@ def parse_image(raw: Union[str, bytes] | None) -> dict | None:
         print("[Image] Missing 'data' field in message.", file=sys.stderr)
         return None
 
-
     # 4. Determine image type and process accordingly
     format = msg.get("format")
     print(f"[Image] Format: {format}", file=sys.stderr)
@@ -178,7 +176,6 @@ def _handle_raw_image(
     else:
         print(f"[Image] cv2.imwrite failed for {path}", file=sys.stderr)
         return None
-
 
 
 def _decode_image_data(

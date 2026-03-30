@@ -75,15 +75,11 @@ def get_fixed_image_path(filename: str = "received_image.jpeg") -> Path:
     camera_dir = get_camera_dir()
 
     if camera_dir.exists() and not camera_dir.is_dir():
-        raise RuntimeError(
-            f"Camera path exists but is not a directory: {camera_dir}"
-        )
+        raise RuntimeError(f"Camera path exists but is not a directory: {camera_dir}")
 
     try:
         camera_dir.mkdir(parents=True, exist_ok=True)
     except OSError as e:
-        raise RuntimeError(
-            f"Failed to create camera directory: {camera_dir}"
-        ) from e
+        raise RuntimeError(f"Failed to create camera directory: {camera_dir}") from e
 
     return camera_dir / filename
