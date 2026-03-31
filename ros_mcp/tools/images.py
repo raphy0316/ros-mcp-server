@@ -60,32 +60,25 @@ def register_image_tools(
 
     @mcp.tool(
         description=(
-            "Analyze a previously received image that was saved by any ROS operation.\n"
-            "Images can be received from:\n"
-            "- Any topic containing image data (not just topics with 'Image' in the name)\n"
-            "- Service responses containing image data\n"
-            "- subscribe_once() or subscribe_for_duration() operations\n"
-            "Use this tool to analyze the saved image after receiving it from any source.\n"
+            "View a previously saved image from disk.\n"
+            "Images are automatically saved when subscribing to image topics.\n"
+            "Use this tool to re-view a saved image without re-subscribing.\n"
         ),
         annotations=ToolAnnotations(
-            title="Analyze Previously Received Image",
+            title="View Saved Image",
             readOnlyHint=True,
         ),
     )
-    def analyze_previously_received_image(
+
+    def view_saved_image(
         image_path: str = "",
     ) -> ImageContent:  # type: ignore  # See issue #140
         """
-        Analyze the previously received image saved at the default location.
+        View a previously saved image from the specified path.
 
-        This tool loads the previously saved image from the system cache directory
-        (which is created by any ROS operation that receives image data), and converts
-        it into an MCP-compatible ImageContent format so that the LLM can interpret it.
-
-        Images can be received from:
-        - Any Topic containing image data
-        - Any Service responses containing image data
-        - subscribe_once() or subscribe_for_duration() operations
+        Images are automatically saved to disk when subscribing to image topics
+        via subscribe_once() or subscribe_for_duration(). Use this tool to
+        re-view a saved image without re-subscribing.
 
         Args:
             image_path (str): Optional custom path to the image file. If not provided,
