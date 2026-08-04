@@ -41,6 +41,11 @@ def test_robot_spec_is_merged_into_initial_server_instructions(monkeypatch) -> N
     assert "0.5 rad/s as the normal turning speed" in instructions
     assert "prefer 0.4 rad/s for normal turning" in instructions
     assert "Unitree H1" in instructions
+    assert "robot_1: x=0.3, y=-3.0" in instructions
+    assert "robot_2: x=0.0, y=3.0" in instructions
+    assert "robot_3: x=0.0, y=9.0" in instructions
+    assert "return to its original position" in instructions
+    assert "without rebasing" in instructions
 
 
 def test_contoro_verified_spec_exposes_operational_topics() -> None:
@@ -56,3 +61,5 @@ def test_contoro_verified_spec_exposes_operational_topics() -> None:
     assert "Prefer 1.3 m/s" in spec["prompts"]
     assert "normally uses 1.2 m/s" in spec["prompts"]
     assert "yellow-and-black" in spec["prompts"]
+    assert "root z=0.8" in spec["prompts"]
+    assert "home yaw=0.0" in spec["prompts"]

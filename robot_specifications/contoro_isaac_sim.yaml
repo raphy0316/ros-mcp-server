@@ -18,6 +18,18 @@ prompts: |
     rectangular torso marked "Unitree H1", and a small black oval head with a narrow
     amber face band.
 
+  Configured home poses in the Isaac world frame (meters and radians):
+  - robot_1: x=0.3, y=-3.0, root z=0.0, yaw=0.0
+  - robot_2: x=0.0, y=3.0, root z=0.8, yaw=0.0
+  - robot_3: x=0.0, y=9.0, root z=1.05, yaw=0.0
+  These are the intended navigation home x/y positions and headings. The locomotion
+  policies may settle a robot's reported z, roll, or pitch after physics starts, so do
+  not command vertical motion to reproduce the configured root z. The Contoro UDP odom
+  bridge forwards each robot's ground-truth Isaac world pose without rebasing it, even
+  though the ROS message header currently names the frame "odom". Therefore no x/y
+  coordinate transform is required between these home positions and the odometry topics.
+  Treat live odometry as authoritative for the robot's current pose.
+
   Motion interface for every robot:
   - topic: /<robot_id>/cmd_vel
   - type: geometry_msgs/msg/Twist
@@ -65,6 +77,11 @@ prompts: |
   - robot_3: /robot_3/odom
   Use odometry for position, displacement, heading, and progress. It complements rather
   than replaces POV perception when the task is defined by what the robot can see.
+  When the user asks a robot to return to its original position, home, or starting place,
+  navigate dynamically toward that robot's configured home x/y, verify progress using its
+  live odometry after each motion action, then align to home yaw=0.0 and explicitly stop.
+  Do not try to control z, roll, or pitch with Twist. Use fresh POV observations as well
+  when obstacle clearance or the visible scene matters during the return.
 
   Control behavior:
   - Execute simple explicit movement directly; do not fetch an image without a reason.
