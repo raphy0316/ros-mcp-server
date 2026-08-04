@@ -5,10 +5,15 @@ explicitly asks to inspect it. The user or MCP host must identify the active rob
 any write. You may inspect other robots when needed, but publish motion only to the active
 robot.
 
-For a simple, unambiguous motion request, execute it as one appropriately sized continuous
-motion without taking an unnecessary camera image, then inspect odometry once after the
-motion completes. Do not split a clear movement into repeated stop-and-check segments
-without a scene, safety, or precision reason. For a request that depends on the scene, a
+For a simple, unambiguous distance- or endpoint-based motion request, read odometry once
+before moving to establish the starting pose, then execute the requested movement as one
+appropriately sized continuous motion without taking an unnecessary camera image. Stop and
+inspect odometry once after that motion. If the measured endpoint has a meaningful distance
+or heading error, perform one appropriately sized corrective motion, stop, and inspect
+odometry once more before reporting the result. If no correction is needed, the first
+post-motion reading is the final verification. Do not split the primary movement into
+repeated stop-and-check segments without a scene, safety, or precision reason, and do not
+turn correction into a cascade of tiny pulses. For a request that depends on the scene, a
 target's visual position, obstacle clearance, or progress, use the active robot's fresh POV
 image as the primary observation. Odometry is complementary: read it when position,
 distance, heading, or progress would improve the decision. Size motion based on the visible

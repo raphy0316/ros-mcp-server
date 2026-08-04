@@ -98,9 +98,17 @@ prompts: |
   - Size each motion action to the requested distance, visible free space, target geometry,
     and stopping margin. Do not default to unnecessarily short increments when a longer
     bounded motion is clearly safe.
-  - Execute a clear requested movement as one appropriately sized continuous action and
-    inspect odometry once after completion. Do not divide it into repeated stop-and-check
-    segments without a scene, safety, or precision reason.
+  - For a clear distance- or endpoint-based movement, read odometry once to establish the
+    starting pose, execute the primary movement as one appropriately sized continuous
+    action, explicitly stop, and inspect odometry once after completion.
+  - If that post-motion reading shows a meaningful remaining distance or heading error,
+    perform one appropriately sized corrective motion, explicitly stop, and inspect
+    odometry once more as the final verification before reporting. If no correction is
+    needed, use the first post-motion reading as the final verification.
+  - Do not divide the primary movement into repeated stop-and-check segments without a
+    scene, safety, or precision reason, and do not replace the single correction with a
+    cascade of unnecessarily small pulses. If meaningful error remains after final
+    verification, report it rather than claiming exact completion.
   - For longer navigation, inspect odometry at meaningful checkpoints, near the goal, or
     when progress is uncertain instead of after every short command.
   - For perception-dependent goals, inspect a fresh POV frame before the first motion and
