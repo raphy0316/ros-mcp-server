@@ -7,6 +7,17 @@ prompts: |
   - robot_2: quadruped
   - robot_3: H1 humanoid
 
+  Visual identification:
+  - robot_1 (Nova Carter) is a compact white-and-light-gray wheeled mobile base with four
+    prominent dark wheels, a box-shaped body, green accent panels on its front corners,
+    and a short blue-and-white cylindrical lidar unit centered on top.
+  - robot_2 (quadruped) is a low, dog-like four-legged robot with a long yellow-and-black
+    body, yellow protective side shells, and four slim dark articulated legs. It has no
+    upright torso or human-like head.
+  - robot_3 (H1 humanoid) is a tall gray biped with two arms and two long legs, a dark
+    rectangular torso marked "Unitree H1", and a small black oval head with a narrow
+    amber face band.
+
   Motion interface for every robot:
   - topic: /<robot_id>/cmd_vel
   - type: geometry_msgs/msg/Twist
@@ -18,18 +29,25 @@ prompts: |
     linear: {x: <forward/back>, y: <strafe>, z: 0.0}
     angular: {x: 0.0, y: 0.0, z: <left/right yaw>}
   Positive linear.x moves forward and positive angular.z turns left.
+  robot_1's Nova Carter base has no tested non-zero minimum threshold that must be
+  enforced. Prefer 1.3 m/s for normal forward motion and an angular.z magnitude of
+  0.4 rad/s for normal turning; use smaller values when precision or safety requires it.
   robot_2's quadruped policy has a tested forward walking threshold:
   - A forward linear.x of 0.3 m/s or lower may leave the robot standing still.
   - Use at least 0.35 m/s for any non-zero forward command.
-  - Prefer 0.8 m/s as the normal forward cruise speed.
+  - Prefer 1.0 m/s as the normal forward cruise speed.
   - For a small remaining distance, shorten the command duration instead of reducing
     forward speed below 0.35 m/s.
+  - Use an angular.z magnitude of at least 0.3 rad/s for any non-zero turn, and prefer
+    0.5 rad/s as the normal turning speed. The sign selects left or right.
   - Check /robot_2/odom after a movement when distance or progress matters. If a
     forward command produces no meaningful odometry progress, send a zero Twist and
     stop instead of continuing blindly.
-  robot_3's H1 policy accepts forward linear.x from 0.0 through 1.0 and angular.z
-  from -1.0 through 1.0. It ignores lateral linear.y and clips negative linear.x to
-  zero, so turn around before asking H1 to travel in the opposite direction.
+  robot_3's H1 policy requires at least 0.2 m/s for a non-zero forward command and
+  normally uses 1.2 m/s as its recommended forward speed. Use an angular.z magnitude
+  of at least 0.2 rad/s for a non-zero turn and prefer 0.4 rad/s for normal turning.
+  It ignores lateral linear.y and clips negative linear.x to zero, so turn around before
+  asking H1 to travel in the opposite direction.
 
   Camera topics for each robot use sensor_msgs/msg/Image:
   - /<robot_id>/camera/pov/image_raw is the robot's forward-facing first-person view.
