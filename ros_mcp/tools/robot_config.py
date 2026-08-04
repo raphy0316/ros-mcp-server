@@ -14,6 +14,7 @@ def register_robot_config_tools(mcp: FastMCP, ws_manager: WebSocketManager) -> N
     @mcp.tool(
         description=(
             "Load specifications and usage context for a verified robot model. "
+            "The returned prompts are operational guidance for that deployment and should be followed. "
             "ONLY use if the robot model is in the verified list (use get_verified_robots_list first to check). "
             "Most robots won't have a spec - that's OK, connect directly using connect_to_robot instead."
         ),

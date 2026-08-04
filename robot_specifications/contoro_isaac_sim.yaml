@@ -1,0 +1,49 @@
+name: contoro_isaac_sim
+alias: contoro
+type: simulation
+prompts: |
+  Contoro Isaac Sim contains three independently controlled robots:
+  - robot_1: Nova Carter mobile base
+  - robot_2: quadruped
+  - robot_3: H1 humanoid
+
+  Motion interface for every robot:
+  - topic: /<robot_id>/cmd_vel
+  - type: geometry_msgs/msg/Twist
+  - use publish_for_durations with rate_hz: 10 for non-zero velocity commands
+  - end every motion with an explicit all-zero Twist
+  - publish only to the robot selected by the user or MCP host
+
+  A Twist payload has this form:
+    linear: {x: <forward/back>, y: <strafe>, z: 0.0}
+    angular: {x: 0.0, y: 0.0, z: <left/right yaw>}
+  Positive linear.x moves forward and positive angular.z turns left.
+  robot_3's H1 policy accepts forward linear.x from 0.0 through 1.0 and angular.z
+  from -1.0 through 1.0. It ignores lateral linear.y and clips negative linear.x to
+  zero, so turn around before asking H1 to travel in the opposite direction.
+
+  Camera topics for each robot use sensor_msgs/msg/Image:
+  - /<robot_id>/camera/pov/image_raw is the robot's forward-facing first-person view.
+    This is the primary visual observation for navigation, target following, alignment,
+    and obstacle-aware decisions.
+  - /<robot_id>/camera/third_person/image_raw is an external presentation view. Use it
+    only when an overview is explicitly useful or requested.
+  - /<robot_id>/camera/top/image_raw is a top-down view.
+  Call subscribe_once again after motion to obtain a fresh frame; an earlier image does
+  not represent the robot's current view.
+
+  Pose topics use nav_msgs/msg/Odometry:
+  - robot_1: /robot_1/world_odom
+  - robot_2: /robot_2/odom
+  - robot_3: /robot_3/odom
+  Use odometry for position, displacement, heading, and progress. It complements rather
+  than replaces POV perception when the task is defined by what the robot can see.
+
+  Control behavior:
+  - Execute simple explicit movement directly; do not fetch an image without a reason.
+  - For perception-dependent goals, inspect a fresh POV frame, optionally inspect odom,
+    choose one small bounded action, execute it, and re-observe.
+  - When following a visible target, steer according to its horizontal displacement from
+    the POV image center and reacquire it after each motion.
+  - Do not build a fixed action list in advance for a scene-dependent task.
+  - If observations are unavailable or ambiguous, stop rather than continue blindly.

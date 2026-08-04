@@ -10,6 +10,7 @@ from fastmcp import FastMCP
 
 from ros_mcp.prompts import register_all_prompts
 from ros_mcp.resources import register_all_resources
+from ros_mcp.server_instructions import load_server_instructions
 from ros_mcp.tools import register_all_tools
 from ros_mcp.utils.websocket import WebSocketManager
 
@@ -20,7 +21,7 @@ ROSBRIDGE_PORT = (
 )
 
 # Initialize MCP server
-mcp = FastMCP("ros-mcp-server")
+mcp = FastMCP("ros-mcp-server", instructions=load_server_instructions())
 
 # Initialize WebSocket manager
 ws_manager = WebSocketManager(ROSBRIDGE_IP, ROSBRIDGE_PORT, default_timeout=5.0)
