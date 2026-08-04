@@ -31,6 +31,8 @@ def test_robot_spec_is_merged_into_initial_server_instructions(monkeypatch) -> N
     assert "VERIFIED ROBOT SPECIFICATION (contoro_isaac_sim)" in instructions
     assert "/<robot_id>/camera/pov/image_raw" in instructions
     assert "/robot_1/world_odom" in instructions
+    assert "do not default to timid" in instructions
+    assert "After each motion action" in instructions
     assert "rate_hz: 10" in instructions
     assert "at least 0.35 m/s" in instructions
     assert "Prefer 0.8 m/s" in instructions
@@ -41,6 +43,8 @@ def test_contoro_verified_spec_exposes_operational_topics() -> None:
 
     assert "/<robot_id>/camera/pov/image_raw" in spec["prompts"]
     assert "/robot_1/world_odom" in spec["prompts"]
+    assert "After every motion action" in spec["prompts"]
+    assert "unnecessarily short increments" in spec["prompts"]
     assert "rate_hz: 10" in spec["prompts"]
     assert "at least 0.35 m/s" in spec["prompts"]
     assert "Prefer 0.8 m/s" in spec["prompts"]

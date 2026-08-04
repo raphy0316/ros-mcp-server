@@ -50,8 +50,14 @@ prompts: |
 
   Control behavior:
   - Execute simple explicit movement directly; do not fetch an image without a reason.
-  - For perception-dependent goals, inspect a fresh POV frame, optionally inspect odom,
-    choose one small bounded action, execute it, and re-observe.
+  - Size each motion action to the requested distance, visible free space, target geometry,
+    and stopping margin. Do not default to unnecessarily short increments when a longer
+    bounded motion is clearly safe.
+  - After every motion action, inspect the active robot's odometry to verify its current
+    position and meaningful progress before issuing another motion action or reporting
+    completion.
+  - For perception-dependent goals, inspect a fresh POV frame before the first motion and
+    again after each motion action before deciding what to do next.
   - When following a visible target, steer according to its horizontal displacement from
     the POV image center and reacquire it after each motion.
   - Do not build a fixed action list in advance for a scene-dependent task.
