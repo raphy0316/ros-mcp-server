@@ -101,6 +101,13 @@ prompts: |
   - Execute a clear requested movement as one appropriately sized continuous action and
     inspect odometry once after completion. Do not divide it into repeated stop-and-check
     segments without a scene, safety, or precision reason.
+  - If a completion or checkpoint observation shows insufficient progress, wrong heading,
+    unintended motion, a missed target, or lost visual alignment, issue an appropriately
+    sized corrective motion and verify again. Continue this observe-correct-verify loop as
+    needed until the goal is reached or safe progress is no longer possible; do not report
+    success merely because the first motion command finished.
+  - Keep primary and corrective movements as continuous and meaningful as the available
+    clearance permits. Do not degrade correction into many tiny stop-observe pulses.
   - For longer navigation, inspect odometry at meaningful checkpoints, near the goal, or
     when progress is uncertain instead of after every short command.
   - For perception-dependent goals, inspect a fresh POV frame before the first motion and
