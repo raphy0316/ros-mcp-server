@@ -15,7 +15,8 @@ def register_robot_config_tools(mcp: FastMCP, ws_manager: WebSocketManager) -> N
         description=(
             "Load specifications and usage context for a verified robot model. "
             "The returned prompts are operational guidance for that deployment and should be followed. "
-            "ONLY use if the robot model is in the verified list (use get_verified_robots_list first to check). "
+            "If you already know the exact verified model name, call this tool directly. "
+            "Use get_verified_robots_list first only when the exact name is unknown. "
             "Most robots won't have a spec - that's OK, connect directly using connect_to_robot instead."
         ),
         annotations=ToolAnnotations(
@@ -28,7 +29,8 @@ def register_robot_config_tools(mcp: FastMCP, ws_manager: WebSocketManager) -> N
         Load pre-defined specifications and additional context for a verified robot model.
 
         This is OPTIONAL - only for a small set of pre-verified robot models stored in the repository.
-        Use get_verified_robots_list() first to check if a spec exists.
+        If the exact verified model name is known, call this tool directly.
+        Otherwise use get_verified_robots_list() first to discover available names.
         If no spec exists for your robot, simply use connect_to_robot() directly.
 
         Args:
@@ -52,7 +54,7 @@ def register_robot_config_tools(mcp: FastMCP, ws_manager: WebSocketManager) -> N
     @mcp.tool(
         description=(
             "List pre-verified robot models that have specification files with usage guidance available. "
-            "Use this to check if a robot model has additional context available before calling get_verified_robot_spec. "
+            "Use this when the exact verified model name is unknown; it is not required when the name is already known. "
             "If your robot is not in this list, you can still connect to it directly using connect_to_robot."
         ),
         annotations=ToolAnnotations(
