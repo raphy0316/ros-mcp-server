@@ -18,6 +18,15 @@ prompts: |
     linear: {x: <forward/back>, y: <strafe>, z: 0.0}
     angular: {x: 0.0, y: 0.0, z: <left/right yaw>}
   Positive linear.x moves forward and positive angular.z turns left.
+  robot_2's quadruped policy has a tested forward walking threshold:
+  - A forward linear.x of 0.3 m/s or lower may leave the robot standing still.
+  - Use at least 0.35 m/s for any non-zero forward command.
+  - Prefer 0.8 m/s as the normal forward cruise speed.
+  - For a small remaining distance, shorten the command duration instead of reducing
+    forward speed below 0.35 m/s.
+  - Check /robot_2/odom after a movement when distance or progress matters. If a
+    forward command produces no meaningful odometry progress, send a zero Twist and
+    stop instead of continuing blindly.
   robot_3's H1 policy accepts forward linear.x from 0.0 through 1.0 and angular.z
   from -1.0 through 1.0. It ignores lateral linear.y and clips negative linear.x to
   zero, so turn around before asking H1 to travel in the opposite direction.
