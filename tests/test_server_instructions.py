@@ -37,6 +37,9 @@ def test_robot_spec_is_merged_into_initial_server_instructions(monkeypatch) -> N
     assert "rate_hz: 10" in instructions
     assert "at least 0.35 m/s" in instructions
     assert "Prefer 1.5 m/s" in instructions
+    assert "gait-activation prefix" in instructions
+    assert "linear.x=1.5 m/s for 0.3 seconds" in instructions
+    assert "without an intervening zero Twist" in instructions
     assert "Prefer 1.8 m/s" in instructions
     assert "normally uses 1.7 m/s" in instructions
     assert "0.5 rad/s as the normal turning speed" in instructions
@@ -60,6 +63,8 @@ def test_contoro_verified_spec_exposes_operational_topics() -> None:
     assert "rate_hz: 10" in spec["prompts"]
     assert "at least 0.35 m/s" in spec["prompts"]
     assert "Prefer 1.5 m/s" in spec["prompts"]
+    assert "gait-activation prefix" in spec["prompts"]
+    assert "reduce or omit the 0.3-second prefix" in spec["prompts"]
     assert "Prefer 1.8 m/s" in spec["prompts"]
     assert "normally uses 1.7 m/s" in spec["prompts"]
     assert "yellow-and-black" in spec["prompts"]

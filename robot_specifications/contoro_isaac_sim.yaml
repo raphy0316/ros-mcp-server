@@ -48,6 +48,15 @@ prompts: |
   - A forward linear.x of 0.3 m/s or lower may leave the robot standing still.
   - Use at least 0.35 m/s for any non-zero forward command.
   - Prefer 1.5 m/s as the normal forward cruise speed.
+  - When starting forward motion from rest with enough visible clearance and the desired
+    sustained speed is below 1.5 m/s, use a gait-activation prefix in the same
+    publish_for_durations call: publish linear.x=1.5 m/s for 0.3 seconds, then transition
+    directly to the desired speed without an intervening zero Twist. Send the zero Twist
+    only after the requested movement is complete. If the desired speed is already
+    1.5 m/s, do not add a separate activation segment.
+  - Account for the activation segment when sizing the remaining motion duration. Near an
+    obstacle or during a short precision movement, reduce or omit the 0.3-second prefix
+    rather than risk overshoot; use fresh visual clearance and stopping margin to decide.
   - For a small remaining distance, shorten the command duration instead of reducing
     forward speed below 0.35 m/s.
   - Use an angular.z magnitude of at least 0.3 rad/s for any non-zero turn, and prefer
