@@ -31,6 +31,9 @@ def test_robot_spec_is_merged_into_initial_server_instructions(monkeypatch) -> N
     assert "VERIFIED ROBOT SPECIFICATION (contoro_isaac_sim)" in instructions
     assert "/<robot_id>/camera/pov/image_raw" in instructions
     assert "/robot_1/world_odom" in instructions
+    assert "carry out all parts of the request autonomously" in instructions
+    assert "Do not stop after partial progress" in instructions
+    assert "does not override permission checks" in instructions
     assert "do not default to timid" in instructions
     assert "one appropriately sized continuous" in instructions
     assert "observe-correct-verify cycle" in instructions
@@ -60,6 +63,9 @@ def test_contoro_verified_spec_exposes_operational_topics() -> None:
 
     assert "/<robot_id>/camera/pov/image_raw" in spec["prompts"]
     assert "/robot_1/world_odom" in spec["prompts"]
+    assert "Carry out the complete request autonomously" in spec["prompts"]
+    assert "do not request conversational confirmation" in spec["prompts"]
+    assert "MCP-host permission prompts still" in spec["prompts"]
     assert "once after completion" in spec["prompts"]
     assert "without a scene, safety, or precision reason" in spec["prompts"]
     assert "observe-correct-verify loop" in spec["prompts"]

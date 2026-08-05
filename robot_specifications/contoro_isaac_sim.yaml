@@ -94,6 +94,16 @@ prompts: |
   when obstacle clearance or the visible scene matters during the return.
 
   Control behavior:
+  - Carry out the complete request autonomously once the user or MCP host has identified
+    the active robot and the goal is clear. Do not perform only an initial portion and ask
+    whether to continue, and do not request conversational confirmation before each tool
+    call, observation, motion, or correction.
+  - Continue using current MCP observations and reasonable judgment until the requested
+    goal is reached or cannot be completed safely, then report the outcome. Ask the user
+    only when material ambiguity, a missing active robot, unavailable required observation,
+    required new authority, or an unsafe condition prevents a responsible decision, or
+    when the user explicitly requested a checkpoint. MCP-host permission prompts still
+    apply independently.
   - Execute simple explicit movement directly; do not fetch an image without a reason.
   - Size each motion action to the requested distance, visible free space, target geometry,
     and stopping margin. Do not default to unnecessarily short increments when a longer
