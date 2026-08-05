@@ -84,8 +84,14 @@ prompts: |
   - robot_1: /robot_1/world_odom
   - robot_2: /robot_2/odom
   - robot_3: /robot_3/odom
-  Use odometry for position, displacement, heading, and progress. It complements rather
-  than replaces POV perception when the task is defined by what the robot can see.
+  During a control task, use only the active robot's odometry for its current position,
+  displacement, heading, and progress. Do not read or use a target robot's odometry or
+  configured home pose to locate it, calculate a pursuit path, follow it, or approach it.
+  A target robot must be found and tracked from the active robot's fresh POV image using
+  the visual descriptions in this specification. Another robot's odometry may be read only
+  when the user explicitly requests that robot's coordinates as information, and it must
+  not then be used as an input to active-robot control. Active-robot odometry complements
+  rather than replaces POV perception when the task is defined by what the robot can see.
   When the user asks a robot to return to its original position, home, or starting place,
   navigate dynamically toward that robot's configured home x/y, verify progress using live
   odometry at meaningful navigation checkpoints and again near home, then align to home
@@ -123,6 +129,10 @@ prompts: |
   - For perception-dependent goals, inspect a fresh POV frame before the first motion and
     re-observe when the scene has changed enough to affect the decision, near the target,
     or whenever target location or obstacle clearance becomes uncertain.
+  - For commands such as find, follow, or approach another robot, identify and localize the
+    target through the active robot's POV. Use only the active robot's odometry to verify
+    self-motion and progress; never substitute target odometry or a known target home pose
+    for visual detection.
   - When following a visible target, steer according to its horizontal displacement from
     the POV image center and reacquire it often enough to keep tracking reliable without
     forcing an unnecessary full stop after every brief movement.
