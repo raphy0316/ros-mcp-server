@@ -45,11 +45,12 @@ prompts: |
   enforced. Prefer 1.8 m/s for normal forward motion and an angular.z magnitude of
   0.4 rad/s for normal turning; use smaller values when precision or safety requires it.
   robot_2's quadruped policy has a tested forward walking threshold:
-  - While nominally stopped, the quadruped may slowly yaw to the right. Account for this
-    rightward drift when planning and executing motion: verify its live heading from
-    /robot_2/odom (and a fresh POV frame when scene alignment matters), then apply a
-    measured leftward heading correction when needed instead of assuming that a zero
-    Twist preserves the previous heading.
+  - While nominally stopped, the quadruped's posture may twist slightly and shift its
+    body-mounted camera view slowly to the right even when the robot base is not actually
+    translating or yawing. Account for this camera-only visual drift when interpreting
+    POV alignment. Check /robot_2/odom before treating the image shift as robot motion,
+    and do not apply an automatic leftward motion correction unless odometry or other
+    reliable pose evidence confirms that the robot itself changed position or heading.
   - A forward linear.x of 0.3 m/s or lower may leave the robot standing still.
   - Use at least 0.35 m/s for any non-zero forward command.
   - Prefer 1.5 m/s as the normal forward cruise speed.
